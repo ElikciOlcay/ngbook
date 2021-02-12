@@ -40,6 +40,7 @@ export class BookStoreService {
   }
 
   getAll(): Book[] {
+    console.table(this.books);
     return this.books;
   }
 

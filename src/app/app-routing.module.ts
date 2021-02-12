@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'books/:isbn',
     component: BookDetailsComponent
+  },
+  {
+    path: '**',
+    component: HomeComponent
   }
 ];
 
