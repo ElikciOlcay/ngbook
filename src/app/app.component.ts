@@ -9,17 +9,10 @@ type ViewState = 'list' | 'details';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  book: Book;
-  viewState: ViewState = 'list';
 
-  showList() {
-    this.viewState = 'list'
+  ngOnInit(): void {
   }
 
-  showDetails(book: Book) {
-    this.book = book;
-    this.viewState = 'details';
-  }
 
 
 }
