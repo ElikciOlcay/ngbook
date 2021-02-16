@@ -8,6 +8,11 @@
   <p *ngIf="books && !books.length">
     Es wurden nich keine Büche eingetragen
   </p>
+  <div *ngIf="errorMessage" class="ui error message">
+    <div class="header">
+      HttpError
+    </div>
+  </div>
 </div>
 
 

@@ -11,12 +11,16 @@ import { BookStoreService } from '../shared/book-store.service';
 export class BookListComponent implements OnInit {
 
   books: Book[] = [];
+  errorMessage: string;
 
   constructor(private bs: BookStoreService) { }
 
 
   ngOnInit(): void {
-    this.bs.getAll().subscribe(res => this.books = res);
+    this.bs.getAll().subscribe(
+      res => this.books = res,
+      err => this.errorMessage = 'Http Fehler'
+      );
   }
 
 
