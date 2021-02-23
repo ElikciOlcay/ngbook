@@ -10,7 +10,7 @@ import { catchError, map, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class BookStoreService {
-  private api = 'https://api4.angular-buch.com';
+  private api = 'https://api4.angular-buch.com/secure';
 
   constructor(private http: HttpClient) {}
 
@@ -48,6 +48,12 @@ export class BookStoreService {
   // response type text, beacause on delete the body is empty. Otherwise it will throw an error.
   remove(isbn: string): Observable<any> {
     return this.http.delete(`${this.api}/book/${isbn}`, {responseType: 'text'});
+  }
+
+  create(book: Book): Observable<any> {
+    return this.http.post(`${this.api}/book`, book,
+    { responseType: 'text'}).
+    pipe(catchError(this.errorHandler));
   }
 
 
