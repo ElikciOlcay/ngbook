@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'bm-form-messages',
@@ -8,7 +8,7 @@ import { AbstractControl } from '@angular/forms';
 })
 export class FormMessagesComponent implements OnInit {
 
-  @Input() control: AbstractControl;
+  @Input() control: AbstractControl | null;
   @Input() controlName: string;
 
   constructor() { }
@@ -19,13 +19,13 @@ export class FormMessagesComponent implements OnInit {
     },
     isbn: {
       required: 'Es muss eine ISBN angegeben werden',
-      minLength: 'Die ISBN muss mindesten 10 Zeichen haben',
-      maxLength: 'Die ISBN darf maximal 13 Zeichen haben'
+      minlength: 'Die ISBN muss mindesten 10 Zeichen haben',
+      maxlength: 'Die ISBN darf maximal 13 Zeichen haben'
     },
     published: {
       required: 'Es muss ein Erscheinungsdatum angegeben werden'
     },
-    authors: {
+    author: {
       required: 'Ess muss ein Autor angegeben werden'
     }
   };
@@ -34,9 +34,13 @@ export class FormMessagesComponent implements OnInit {
   }
 
   errorsForControl(): string[] {
-    const messages = Object.keys(this.allMessages);
+    const messages = (this.allMessages as any)[this.controlName];
+    if (this.control !== null) {
+      if (!this.control.errors  || !this.control.dirty) {
+        return [];
+      }
+      return Object.keys(this.control.errors).map(err => messages[err]);
+    }
+    return [];
   }
-
-
-
 }

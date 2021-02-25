@@ -1,33 +1,45 @@
-<form class="ui form" #bookForm="ngForm" (ngSubmit)="submitForm()">
+<form class="ui form" [formGroup]="bookForm" (ngSubmit)="submitForm()">
   <label>Buchtitel</label>
-  <input name="title" [(ngModel)]="book.title" required>
+  <input formControlName="title">
+  <bm-form-messages [control]="bookForm.get('title')" controlName="title" ></bm-form-messages>
 
   <label>Untertitel</label>
-  <input name="subtitle" [(ngModel)]="book.subtitle">
+  <input name="subtitle">
 
   <label>ISBN</label>
-  <input name="isbn" [(ngModel)]="book.isbn" required minLength="10" maxlength="13">
+  <input formControlName="isbn" maxlength="13">
+  <bm-form-messages [control]="bookForm.get('isbn')" controlName="isbn" ></bm-form-messages>
 
   <label>Erscheinungsdatum</label>
-  <input name="published" type="date" [(ngModel)]="book.published" useValueAsDate required>
+  <input formControlName="published" type="date" useValueAsDate >
+  <bm-form-messages [control]="bookForm.get('published')" controlName="published" ></bm-form-messages>
 
-  <label>Autor</label>
-  <input name="authors" [(ngModel)]="book.authors[0]" required>
+  <label>Autoren</label>
+  <button type="button" class="ui mini button" (click)="addAuthorControl()">+ Autor</button>
+  <div class="fields" formArrayName="authors">
+    <div class="sixteen wide field" *ngFor="let c of authors.controls; index as i">
+      <input placeholder="Autor" [formControlName]="i">
+    </div>
+  </div>
+  <bm-form-messages [control]="bookForm.get('authors')" controlName="authors" ></bm-form-messages>
+
 
   <label>Beschreibung</label>
-  <textarea name="description" [(ngModel)]="book.description"></textarea>
+  <textarea formControlName="description"></textarea>
 
-  <label>Bild</label>
-  <div class="two fields">
-    <div class="field">
-      <input name="url" *ngIf="book.thumbnails" [(ngModel)]="book.thumbnails[0].url"  placeholder="URL">
-    </div>
-    <div class="field">
-      <input name="title" *ngIf="book.thumbnails" [(ngModel)]="book.thumbnails[0].title" placeholder="Title">
+  <label>Bilder</label>
+  <button type="button" class="ui mini button" (click)="addThumbnailControl()">+ Bild</button>
+  <div formArrayName="thumbnails">
+    <div class="fields" *ngFor="let c of thumbnails.controls; index as i" [formGroupName] = "i">
+      <div class="nine wide field">
+        <input placeholder="URL" formControlName="url">
+      </div>
+      <div class="seven wide field">
+        <input placeholder="title" formControlName="title">
+      </div>
     </div>
   </div>
 
   <button class="ui button" type="submit" [disabled]="bookForm.invalid">Speichern</button>
-
 
 </form>

@@ -62,4 +62,11 @@ export class BookStoreService {
     return throwError(error);
   }
 
+  update(book: Book): Observable<any> {
+    return this.http.put(
+      `${this.api}/book/${book.isbn}`, book,
+      { responseType: 'text'}
+    ).pipe(catchError(this.errorHandler));
+  }
+
 }
