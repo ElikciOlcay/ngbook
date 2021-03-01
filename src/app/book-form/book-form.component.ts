@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../shared/book';
 import { Thumbnail } from '../shared/thumbnail';
@@ -8,7 +8,7 @@ import { Thumbnail } from '../shared/thumbnail';
   templateUrl: './book-form.component.html',
   styleUrls: ['./book-form.component.css']
 })
-export class BookFormComponent implements OnInit {
+export class BookFormComponent implements OnInit, OnChanges {
   bookForm: FormGroup;
   @Output() submitBook = new EventEmitter<Book>();
   @Input() book: Book;
@@ -17,15 +17,23 @@ export class BookFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initForm();
+    this.setFormValues(this.book);
+  }
+
   submitForm(): void {
     const formValue = this.bookForm.value;
+    const isbn = this.editing ? this.book.isbn : formValue.isbn;
     const authors = formValue.authors.filter((author: any) => author !== null);
     const thumbnails = formValue.thumbnails.filter((thumbnail: { url: string; }) => thumbnail.url);
     const newBook: Book = {
       ...formValue,
+      isbn,
       authors,
       thumbnails
-    }
+    };
     this.submitBook.emit(newBook);
     this.bookForm.reset();
   }
@@ -39,7 +47,7 @@ export class BookFormComponent implements OnInit {
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
       subtitle: [''],
-      isbn: ['', [
+      isbn: [{value: '', disabled: this.editing}, [
         Validators.required,
         Validators.minLength(10),
         Validators.maxLength(13)
@@ -75,6 +83,21 @@ export class BookFormComponent implements OnInit {
 
   addThumbnailControl(): void {
     this.thumbnails.push(this.fb.group({ title: '', url: ''}));
+  }
+
+  private setFormValues(book: Book): void {
+    this.bookForm.patchValue(book);
+
+    this.bookForm.setControl(
+      'authors',
+      this.buildAuthorsArray(book.authors)
+    );
+
+    this.bookForm.setControl(
+      'thumbnails',
+      this.buildThumbnailsArray(book.thumbnails ?? [])
+    );
+
   }
 
 }
