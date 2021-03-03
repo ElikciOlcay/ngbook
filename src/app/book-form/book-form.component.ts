@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../shared/book';
+import { BookExistsValidatorService } from '../shared/book-exists-validator.service';
+import { BookValidators } from '../shared/book-validators';
 import { Thumbnail } from '../shared/thumbnail';
 
 @Component({
@@ -15,7 +17,7 @@ export class BookFormComponent implements OnInit, OnChanges {
   @Input() editing = false;
 
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private bookExistValidator: BookExistsValidatorService) { }
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -49,9 +51,10 @@ export class BookFormComponent implements OnInit, OnChanges {
       subtitle: [''],
       isbn: [{value: '', disabled: this.editing}, [
         Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(13)
-      ]],
+        BookValidators.isbnFormat
+      ],
+      this.editing ? null : [this.bookExistValidator]
+      ],
       description: [''],
       authors: this.buildAuthorsArray(['']),
       thumbnails: this.buildThumbnailsArray([

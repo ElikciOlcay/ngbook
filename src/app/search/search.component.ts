@@ -15,7 +15,7 @@ export class SearchComponent implements OnInit {
   foundBooks: Book[] = [];
   isLoading = false;
 
-  constructor(private bs : BookStoreService) { }
+  constructor(private bs: BookStoreService) { }
 
   ngOnInit(): void {
     this.keyUp$.pipe(
