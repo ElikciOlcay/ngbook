@@ -1,4 +1,4 @@
-<div *ngIf="book; else loading">
+<ng-container *ngIf="book$ | async as book; else loading">
   <h1>{{ book.title }}</h1>
   <h3 *ngIf="book.subtitle"> {{ book.subtitle }}</h3>
   <div class="ui divider"></div>
@@ -11,11 +11,11 @@
     </div>
     <div class="four wide column">
       <h4>ISBN</h4>
-      {{ book.isbn }}
+      {{ book.isbn | isbn }}
     </div>
     <div class="four wide column">
       <h4>Erschienen</h4>
-      {{ book.published }}
+      {{ book.published | date:'longDate'}}
     </div>
     <div *ngIf="book.rating" class="four wide column">
       <h4>Rating</h4>
@@ -27,13 +27,13 @@
   <div class="ui small images">
     <img *ngFor="let t of book.thumbnails" [src]="t.url">
   </div>
-  <button class="ui tiny red labeled icon button" (click)="removeBook()">
+  <button class="ui tiny red labeled icon button" (click)="removeBook(book)">
     <i class="remove icon"></i>Buch löschen
   </button>
   <a class="ui tiny yellow labeled icon button" [routerLink]="['../../admin/edit', book.isbn]">
     <i class="write icon"></i> Buch bearbeiten
   </a>
-</div>
+</ng-container>
 
 <ng-template #loading>
   <div class="ui active centered inline loader"></div>

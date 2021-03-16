@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
@@ -11,7 +12,7 @@ import { BookStoreService } from '../shared/book-store.service';
 })
 export class EditBookComponent implements OnInit {
 
-  book: Book;
+  book$: Observable<Book>;
 
   constructor(
     private bs: BookStoreService,
@@ -20,11 +21,10 @@ export class EditBookComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
+   this.book$ = this.route.paramMap.pipe(
       map(params => params.get('isbn') ?? ''),
       switchMap((isbn: string) => this.bs.getSingle(isbn))
-    )
-    .subscribe(book => this.book = book);
+    );
   }
 
   updateBook(book: Book): void {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
 
@@ -9,7 +10,8 @@ import { BookStoreService } from '../shared/book-store.service';
   styleUrls: ['./book-details.component.css']
 })
 export class BookDetailsComponent implements OnInit {
-  book: Book;
+
+  book$: Observable<Book>;
 
   constructor(
     private bs: BookStoreService,
@@ -19,16 +21,17 @@ export class BookDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const params = this.route.snapshot.paramMap;
-    this.bs.getSingle(params.get('isbn')!).subscribe(b => this.book = b);
+    // tslint:disable-next-line: no-non-null-assertion
+    this.book$ = this.bs.getSingle(params.get('isbn')!);
   }
 
-  getRating(num: number) {
+  getRating(num: number): any[] {
     return new Array(num);
   }
 
-  removeBook() {
-    if(confirm('Buch wirklich löschen?')) {
-      this.bs.remove(this.book.isbn).subscribe(res => this.router.navigate(['../'], {relativeTo: this.route}));
+  removeBook(book: Book): void {
+    if (confirm('Buch wirklich löschen?')) {
+      this.bs.remove(book.isbn).subscribe(res => this.router.navigate(['../'], {relativeTo: this.route}));
     }
   }
 
