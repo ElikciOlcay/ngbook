@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'bm-book-details',
@@ -12,11 +13,13 @@ import { BookStoreService } from '../shared/book-store.service';
 export class BookDetailsComponent implements OnInit {
 
   book$: Observable<Book>;
+  zoomSize = 'large';
 
   constructor(
     private bs: BookStoreService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +38,9 @@ export class BookDetailsComponent implements OnInit {
     }
   }
 
-
+  goBack(): void {
+    this.location.back();
+  }
 
 
 

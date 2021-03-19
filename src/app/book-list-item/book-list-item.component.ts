@@ -9,6 +9,7 @@ import { Book } from '../shared/book';
 export class BookListItemComponent implements OnInit {
 
   @Input() book: Book;
+  zoomSize = 'small';
 
   constructor() { }
 
