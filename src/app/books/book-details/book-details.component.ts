@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Book } from '../shared/book';
-import { BookStoreService } from '../shared/book-store.service';
+import { Book } from '../../shared/book';
+import { BookStoreService } from '../../shared/book-store.service';
 import {Location} from '@angular/common';
 
 @Component({
