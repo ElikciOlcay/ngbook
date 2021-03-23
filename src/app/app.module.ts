@@ -1,4 +1,4 @@
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -8,9 +8,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { SearchComponent } from './search/search.component';
 import { TokenInterceptor } from './shared/token.interceptor';
-
-import { registerLocaleData } from '@angular/common';
-import localDe from '@angular/common/locales/de';
 
 
 
@@ -30,15 +27,12 @@ import localDe from '@angular/common/locales/de';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    },
-    {
-      provide: LOCALE_ID, useValue: 'de'
     }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor() {
-    registerLocaleData(localDe);
+
   }
 }
